@@ -47,10 +47,17 @@ Here are the available options:
     clear_after: null         // Override the element after which the clearing div should be inserted (null > right after the button)
 
 
+Styling
+-------
+
+The button and labels are styled with a few lines of CSS in ```jquery.switchButton.css```.  
+Have a look at this file and fiddle with it to change the look of you switch button!
+
+
 License
 -------
 
-Copyright (c) 2011-2013 Olivier Lance - Released under MIT License:
+Copyright (c) Olivier Lance - Released under MIT License:
  
 > Permission is hereby granted, free of charge, to any person
 > obtaining a copy of this software and associated documentation
