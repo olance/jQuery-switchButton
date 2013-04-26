@@ -3,9 +3,14 @@ jQuery-switchButton
 
 jQuery iPhone-like switch button  meant to be used on a ```<input type="checkbox">```.
 
-This widget will replace the receiver element with an iPhone-style switch button with two states: "on" and "off". Labels 
-of the states are customizable, as are their presence and position. The receiver element's "checked" attribute is updated 
+This widget will replace the receiver element with an iPhone-style switch button with two states: "on" and "off". Labels
+of the states are customizable, as are their presence and position. The receiver element's "checked" attribute is updated
 according to the state of the switch, so that it can be used in a ```<form>```.
+
+Demo
+----
+
+Check out the demo page here: http://olance.github.io/jQuery-switchButton/
 
 
 Dependencies
@@ -29,20 +34,20 @@ You can transform this checkbox to a nice-looking switch button by calling ```sw
     $("input#great").switchButton(options);
 
 By default, this will display a button with "ON" and "OFF" labels on each side of the switch. You can control this and other
-parameters at initialization or by calling ```switchButton("option", "optionName", value)```.  
+parameters at initialization or by calling ```switchButton("option", "optionName", value)```.
 Here are the available options:
 
     checked: undefined        // State of the switch
-    
+
     show_labels: true         // Should we show the on and off labels?
     labels_placement: "both"  // Position of the labels: "both", "left" or "right"
     on_label: "ON"            // Text to be displayed when checked
     off_label: "OFF"          // Text to be displayed when unchecked
-    
+
     width: 25                 // Width of the button in pixels
     height: 11                // Height of the button in pixels
     button_width: 12          // Width of the sliding part in pixels
-    
+
     clear: true               // Should we insert a div with style="clear: both;" after the switch button?
     clear_after: null         // Override the element after which the clearing div should be inserted (null > right after the button)
 
@@ -50,7 +55,7 @@ Here are the available options:
 Styling
 -------
 
-The button and labels are styled with a few lines of CSS in ```jquery.switchButton.css```.  
+The button and labels are styled with a few lines of CSS in ```jquery.switchButton.css```.
 Have a look at this file and fiddle with it to change the look of you switch button!
 
 
@@ -58,7 +63,7 @@ License
 -------
 
 Copyright (c) Olivier Lance - Released under MIT License:
- 
+
 > Permission is hereby granted, free of charge, to any person
 > obtaining a copy of this software and associated documentation
 > files (the "Software"), to deal in the Software without
