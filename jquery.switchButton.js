@@ -2,7 +2,6 @@
  * jquery.switchButton.js v1.0
  * jQuery iPhone-like switch button
  * @author Olivier Lance <olivier.lance@sylights.com>
- * @edited by Daniel Lee <daniellee121@gmail.com>
  * Copyright (c) Olivier Lance - released under MIT License {{{
  *
  * Permission is hereby granted, free of charge, to any person
