@@ -2,7 +2,7 @@
  * jquery.switchButton.js v1.0
  * jQuery iPhone-like switch button
  * @author Olivier Lance <olivier.lance@sylights.com>
- *
+ * @edited by Daniel Lee <daniellee121@gmail.com>
  * Copyright (c) Olivier Lance - released under MIT License {{{
  *
  * Permission is hereby granted, free of charge, to any person
@@ -54,7 +54,12 @@
             button_width: 12,			// Width of the sliding part in pixels
 
             clear: true,				// Should we insert a div with style="clear: both;" after the switch button?
-            clear_after: null		    // Override the element after which the clearing div should be inserted (null > right after the button)
+            clear_after: null,		    // Override the element after which the clearing div should be inserted (null > right after the button)
+            
+            font_size: 10,        // Set the label font-size. Added by Daniel Lee
+            read_only: false,           // Set to readonly mode if true. Added by Daniel Lee
+            init: function() {},       // callback function for initialization Added by Daniel Lee
+            on_toggle: function() {}   // callback function for initialization Added by Daniel Lee
         },
 
         _create: function() {
@@ -62,9 +67,11 @@
             if (this.options.checked === undefined) {
                 this.options.checked = this.element.prop("checked");
             }
-
             this._initLayout();
             this._initEvents();
+            
+            // added by Daniel Lee
+            this.options.init.call(this);
         },
 
         _initLayout: function() {
@@ -72,12 +79,21 @@
             this.element.hide();
 
             // Create our objects: two labels and the button
-            this.off_label = $("<span>").addClass("switch-button-label");
-            this.on_label = $("<span>").addClass("switch-button-label");
+            this.off_label = $("<span>").addClass("switch-button-label").css("font-size", this.options.font_size);
+            this.on_label = $("<span>").addClass("switch-button-label").css("font-size", this.options.font_size);
+            
+
 
             this.button_bg = $("<div>").addClass("switch-button-background");
             this.button = $("<div>").addClass("switch-button-button");
 
+            // Added by Daniel Lee -- Reset the cursor if readonly
+            if (self.options.read_only) {
+                this.off_label.css("cursor", "default");
+                this.on_label.css("cursor", "default");
+                this.button_bg.css("cursor", "default");
+            }
+            
             // Insert the objects into the DOM
             this.off_label.insertAfter(this.element);
             this.button_bg.insertAfter(this.off_label);
@@ -194,13 +210,21 @@
             this.button_bg.click(function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                self._toggleSwitch();
+                //<-- IF condition added by Daniel Lee on 2013-08-26
+                if (!self.options.read_only) {
+                    self._toggleSwitch();
+                }
                 return false;
             });
             this.button.click(function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                self._toggleSwitch();
+                
+                //<-- IF condition added by Daniel Lee on 2013-08-26
+                if (!self.options.read_only) {
+                    self._toggleSwitch();
+                }
+                
                 return false;
             });
 
@@ -210,7 +234,10 @@
                     return false;
                 }
 
-                self._toggleSwitch();
+                //<-- IF condition added by Daniel Lee on 2013-08-26
+                if (!self.options.read_only) {
+                    self._toggleSwitch();
+                }
                 return false;
             });
 
@@ -219,7 +246,10 @@
                     return false;
                 }
 
-                self._toggleSwitch();
+                //<-- IF condition added by Daniel Lee on 2013-08-26
+                if (!self.options.read_only) {
+                    self._toggleSwitch();
+                }
                 return false;
             });
 
@@ -288,6 +318,26 @@
             }
             // Animate the switch
             this.button.animate({ left: newLeft }, 250, "easeInOutCubic");
+            this.options.on_toggle.call(this);
+        },
+
+        // Check the value of the current status
+        // added by Daniel Lee
+        isChecked: function() {
+            return this.options.checked;
+        },
+        
+        // Set/Unset read only
+        // added by Daniel Lee
+        readOnly: function(value) {
+            //alert(value);
+            $.extend(this.options, {read_only:value});
+            if (value) {
+                this.off_label.css("cursor", "default");
+                this.on_label.css("cursor", "default");
+                this.button_bg.css("cursor", "default");                
+            }
+            this._refresh();
         }
 
     });
