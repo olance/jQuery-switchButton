@@ -26,15 +26,16 @@ Say this is your markup:
 
     <form action="...">
       <label for="great">Isn't it great?!</label><input type="checkbox" name="great" id="great">
+      <label for="great2">This button will become readonly when the button above turned on</label><input type="checkbox" name="great2" id="great2">
     </form>
 
 You can transform this checkbox to a nice-looking switch button by calling ```switchButton()``` on it:
 
     options = { /* see below */ };
     $("input#great").switchButton(options);
-    // Set the switch to be readonly when upon turned ON
+    // Set the switch to be readonly when the button turned ON
     if ($("input#great").switchButton('isChecked')) {
-        $("input#great").switchButton('readOnly', true);
+        $("input#great2").switchButton('readOnly', true);
     }    
 
 By default, this will display a button with "ON" and "OFF" labels on each side of the switch. You can control this and other
@@ -55,10 +56,10 @@ Here are the available options:
     clear: true,               // Should we insert a div with style="clear: both;" after the switch button?
     clear_after: null,         // Override the element after which the clearing div should be inserted (null > right after the button)     
 
-    font_size: 13,             // Font size in pixels: Added by Daniel Lee
-    read_only: false,          // Reset/Set read only: Added by Daniel Lee
-    //init: notifyInit,        // Added by Daniel Lee
-    on_toggle: function() {}   // Added by Daniel Lee
+    font_size: 10,              // Set the label font-size. 
+    read_only: false,           // Set to readonly mode if true. 
+    on_init: function() {},     // callback function for initialization.
+    on_toggle: function() {}    // callback function for toggle after intialization
 
 Styling
 -------
