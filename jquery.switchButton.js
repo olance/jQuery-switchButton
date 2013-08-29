@@ -55,10 +55,10 @@
             clear: true,				// Should we insert a div with style="clear: both;" after the switch button?
             clear_after: null,		    // Override the element after which the clearing div should be inserted (null > right after the button)
             
-            font_size: 10,        // Set the label font-size. Added by Daniel Lee
-            read_only: false,           // Set to readonly mode if true. Added by Daniel Lee
-            init: function() {},       // callback function for initialization Added by Daniel Lee
-            on_toggle: function() {}   // callback function for initialization Added by Daniel Lee
+            font_size: 10,              // Set the label font-size. 
+            read_only: false,           // Set to readonly mode if true. 
+            on_init: function() {},    // callback function for initialization.
+            on_toggle: function() {}   // callback function for toggle after intialization
         },
 
         _create: function() {
@@ -69,8 +69,8 @@
             this._initLayout();
             this._initEvents();
             
-            // added by Daniel Lee
-            this.options.init.call(this);
+            // call the initialization callback
+            this.options.on_init.call(this);
         },
 
         _initLayout: function() {
@@ -86,7 +86,7 @@
             this.button_bg = $("<div>").addClass("switch-button-background");
             this.button = $("<div>").addClass("switch-button-button");
 
-            // Added by Daniel Lee -- Reset the cursor if readonly
+            // reset the cursor to default when read_only is true
             if (self.options.read_only) {
                 this.off_label.css("cursor", "default");
                 this.on_label.css("cursor", "default");
@@ -118,7 +118,7 @@
             // This will animate all checked switches to the ON position when
             // loading... this is intentional!
             this.options.checked = !this.options.checked;
-            this._toggleSwitch();
+            this._toggleSwitch(true);
         },
 
         _refresh: function() {
@@ -209,9 +209,9 @@
             this.button_bg.click(function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                //<-- IF condition added by Daniel Lee on 2013-08-26
+                // skip toggle if read_only = true
                 if (!self.options.read_only) {
-                    self._toggleSwitch();
+                    self._toggleSwitch(false);
                 }
                 return false;
             });
@@ -219,9 +219,9 @@
                 e.preventDefault();
                 e.stopPropagation();
                 
-                //<-- IF condition added by Daniel Lee on 2013-08-26
+                // skip toggle if read_only = true
                 if (!self.options.read_only) {
-                    self._toggleSwitch();
+                    self._toggleSwitch(false);
                 }
                 
                 return false;
@@ -233,9 +233,9 @@
                     return false;
                 }
 
-                //<-- IF condition added by Daniel Lee on 2013-08-26
+                // skip toggle if read_only = true
                 if (!self.options.read_only) {
-                    self._toggleSwitch();
+                    self._toggleSwitch(false);
                 }
                 return false;
             });
@@ -245,9 +245,9 @@
                     return false;
                 }
 
-                //<-- IF condition added by Daniel Lee on 2013-08-26
+                // skip toggle if read_only = true
                 if (!self.options.read_only) {
-                    self._toggleSwitch();
+                    self._toggleSwitch(false);
                 }
                 return false;
             });
@@ -270,10 +270,10 @@
             }
 
             this.options.checked = !value;
-            this._toggleSwitch();
+            this._toggleSwitch(false);
         },
 
-        _toggleSwitch: function() {
+        _toggleSwitch: function(isInit) {
             this.options.checked = !this.options.checked;
             var newLeft = "";
             if (this.options.checked) {
@@ -317,24 +317,31 @@
             }
             // Animate the switch
             this.button.animate({ left: newLeft }, 250, "easeInOutCubic");
-            this.options.on_toggle.call(this);
+            
+            // do not invoke the callback during initialization 
+            if (!isInit) {
+                this.options.on_toggle.call(this);
+            }
         },
 
-        // Check the value of the current status
-        // added by Daniel Lee
+        // getting the current button status
         isChecked: function() {
             return this.options.checked;
         },
         
-        // Set/Unset read only
-        // added by Daniel Lee
+        // set/unset read_only
         readOnly: function(value) {
             //alert(value);
-            $.extend(this.options, {read_only:value});
+            this._setOption("read_only",value);
             if (value) {
                 this.off_label.css("cursor", "default");
                 this.on_label.css("cursor", "default");
                 this.button_bg.css("cursor", "default");                
+            }
+            else {
+                this.off_label.css("cursor", "pointer");
+                this.on_label.css("cursor", "pointer");
+                this.button_bg.css("cursor", "pointer");                 
             }
             this._refresh();
         }
