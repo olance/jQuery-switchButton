@@ -117,6 +117,7 @@
             // Init labels and switch state
             // This will animate all checked switches to the ON position when
             // loading... this is intentional!
+            
             this.options.checked = !this.options.checked;
             this._toggleSwitch(true);
         },
@@ -279,7 +280,11 @@
             if (this.options.checked) {
                 // Update the underlying checkbox state
                 this.element.prop("checked", true);
-                this.element.change();
+                
+                // Avoid triggering change event during initialization
+                if (!isInit) {
+                    this.element.change();
+                }
 
                 var dLeft = this.options.width - this.options.button_width;
                 newLeft = "+=" + dLeft;
@@ -300,7 +305,11 @@
             else {
                 // Update the underlying checkbox state
                 this.element.prop("checked", false);
-                this.element.change();
+                
+                // Avoid triggering change event during initialization
+                if (!isInit) {
+                    this.element.change();
+                }
                 newLeft = "-1px";
 
                 // Update labels states
