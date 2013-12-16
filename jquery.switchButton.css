@@ -1,7 +1,9 @@
 .switch-button-label {
     float: left;
 
-    font-size: 10pt;
+    /*  Daniel Took it out since it will be handled as an option.
+    font-size: 1.2em; 
+    */
     cursor: pointer;
 }
 

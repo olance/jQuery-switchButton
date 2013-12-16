@@ -26,31 +26,40 @@ Say this is your markup:
 
     <form action="...">
       <label for="great">Isn't it great?!</label><input type="checkbox" name="great" id="great">
+      <label for="great2">This button will become readonly when the button above turned on</label><input type="checkbox" name="great2" id="great2">
     </form>
 
 You can transform this checkbox to a nice-looking switch button by calling ```switchButton()``` on it:
 
     options = { /* see below */ };
     $("input#great").switchButton(options);
+    // Set the switch to be readonly when the button turned ON
+    if ($("input#great").switchButton('isChecked')) {
+        $("input#great2").switchButton('readOnly', true);
+    }    
 
 By default, this will display a button with "ON" and "OFF" labels on each side of the switch. You can control this and other
 parameters at initialization or by calling ```switchButton("option", "optionName", value)```.
 Here are the available options:
 
-    checked: undefined        // State of the switch
+    checked: false,            // State of the switch (undefined | true | false)
 
-    show_labels: true         // Should we show the on and off labels?
-    labels_placement: "both"  // Position of the labels: "both", "left" or "right"
-    on_label: "ON"            // Text to be displayed when checked
-    off_label: "OFF"          // Text to be displayed when unchecked
+    show_labels: true,         // Should we show the on and off labels?
+    labels_placement: "both",  // Position of the labels: "both", "left" or "right"
+    on_label: "Completed",     // Text to be displayed when checked
+    off_label: "Not yet",      // Text to be displayed when unchecked
 
-    width: 25                 // Width of the button in pixels
-    height: 11                // Height of the button in pixels
-    button_width: 12          // Width of the sliding part in pixels
+    width: 40,                 // Width of the button in pixels
+    height: 15,                // Height of the button in pixels
+    button_width: 25,          // Width of the sliding part in pixels
 
-    clear: true               // Should we insert a div with style="clear: both;" after the switch button?
-    clear_after: null         // Override the element after which the clearing div should be inserted (null > right after the button)
+    clear: true,               // Should we insert a div with style="clear: both;" after the switch button?
+    clear_after: null,         // Override the element after which the clearing div should be inserted (null > right after the button)     
 
+    font_size: 10,              // Set the label font-size. 
+    read_only: false,           // Set to readonly mode if true. 
+    on_init: function() {},     // callback function for initialization.
+    on_toggle: function() {}    // callback function for toggle after intialization
 
 Styling
 -------
