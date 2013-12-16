@@ -2,7 +2,6 @@
  * jquery.switchButton.js v1.0
  * jQuery iPhone-like switch button
  * @author Olivier Lance <olivier.lance@sylights.com>
- *
  * Copyright (c) Olivier Lance - released under MIT License {{{
  *
  * Permission is hereby granted, free of charge, to any person
@@ -54,7 +53,12 @@
             button_width: 12,			// Width of the sliding part in pixels
 
             clear: true,				// Should we insert a div with style="clear: both;" after the switch button?
-            clear_after: null		    // Override the element after which the clearing div should be inserted (null > right after the button)
+            clear_after: null,		    // Override the element after which the clearing div should be inserted (null > right after the button)
+            
+            font_size: 10,              // Set the label font-size. 
+            read_only: false,           // Set to readonly mode if true. 
+            on_init: function() {},    // callback function for initialization.
+            on_toggle: function() {}   // callback function for toggle after intialization
         },
 
         _create: function() {
@@ -62,9 +66,11 @@
             if (this.options.checked === undefined) {
                 this.options.checked = this.element.prop("checked");
             }
-
             this._initLayout();
             this._initEvents();
+            
+            // call the initialization callback
+            this.options.on_init.call(this);
         },
 
         _initLayout: function() {
@@ -72,12 +78,21 @@
             this.element.hide();
 
             // Create our objects: two labels and the button
-            this.off_label = $("<span>").addClass("switch-button-label");
-            this.on_label = $("<span>").addClass("switch-button-label");
+            this.off_label = $("<span>").addClass("switch-button-label").css("font-size", this.options.font_size);
+            this.on_label = $("<span>").addClass("switch-button-label").css("font-size", this.options.font_size);
+            
+
 
             this.button_bg = $("<div>").addClass("switch-button-background");
             this.button = $("<div>").addClass("switch-button-button");
 
+            // reset the cursor to default when read_only is true
+            if (self.options.read_only) {
+                this.off_label.css("cursor", "default");
+                this.on_label.css("cursor", "default");
+                this.button_bg.css("cursor", "default");
+            }
+            
             // Insert the objects into the DOM
             this.off_label.insertAfter(this.element);
             this.button_bg.insertAfter(this.off_label);
@@ -102,8 +117,9 @@
             // Init labels and switch state
             // This will animate all checked switches to the ON position when
             // loading... this is intentional!
+            
             this.options.checked = !this.options.checked;
-            this._toggleSwitch();
+            this._toggleSwitch(true);
         },
 
         _refresh: function() {
@@ -194,13 +210,21 @@
             this.button_bg.click(function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                self._toggleSwitch();
+                // skip toggle if read_only = true
+                if (!self.options.read_only) {
+                    self._toggleSwitch(false);
+                }
                 return false;
             });
             this.button.click(function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                self._toggleSwitch();
+                
+                // skip toggle if read_only = true
+                if (!self.options.read_only) {
+                    self._toggleSwitch(false);
+                }
+                
                 return false;
             });
 
@@ -210,7 +234,10 @@
                     return false;
                 }
 
-                self._toggleSwitch();
+                // skip toggle if read_only = true
+                if (!self.options.read_only) {
+                    self._toggleSwitch(false);
+                }
                 return false;
             });
 
@@ -219,7 +246,10 @@
                     return false;
                 }
 
-                self._toggleSwitch();
+                // skip toggle if read_only = true
+                if (!self.options.read_only) {
+                    self._toggleSwitch(false);
+                }
                 return false;
             });
 
@@ -241,16 +271,20 @@
             }
 
             this.options.checked = !value;
-            this._toggleSwitch();
+            this._toggleSwitch(false);
         },
 
-        _toggleSwitch: function() {
+        _toggleSwitch: function(isInit) {
             this.options.checked = !this.options.checked;
             var newLeft = "";
             if (this.options.checked) {
                 // Update the underlying checkbox state
                 this.element.prop("checked", true);
-                this.element.change();
+                
+                // Avoid triggering change event during initialization
+                if (!isInit) {
+                    this.element.change();
+                }
 
                 var dLeft = this.options.width - this.options.button_width;
                 newLeft = "+=" + dLeft;
@@ -272,7 +306,11 @@
             else {
                 // Update the underlying checkbox state
                 this.element.prop("checked", false);
-                this.element.change();
+                
+                // Avoid triggering change event during initialization
+                if (!isInit) {
+                    this.element.change();
+                }
                 newLeft = "-1px";
 
                 // Update labels states
@@ -290,6 +328,33 @@
             }
             // Animate the switch
             this.button.animate({ left: newLeft }, 250, "easeInOutCubic");
+            
+            // do not invoke the callback during initialization 
+            if (!isInit) {
+                this.options.on_toggle.call(this);
+            }
+        },
+
+        // getting the current button status
+        isChecked: function() {
+            return this.options.checked;
+        },
+        
+        // set/unset read_only
+        readOnly: function(value) {
+            //alert(value);
+            this._setOption("read_only",value);
+            if (value) {
+                this.off_label.css("cursor", "default");
+                this.on_label.css("cursor", "default");
+                this.button_bg.css("cursor", "default");                
+            }
+            else {
+                this.off_label.css("cursor", "pointer");
+                this.on_label.css("cursor", "pointer");
+                this.button_bg.css("cursor", "pointer");                 
+            }
+            this._refresh();
         }
 
     });
