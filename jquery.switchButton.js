@@ -54,7 +54,9 @@
             button_width: 12,			// Width of the sliding part in pixels
 
             clear: true,				// Should we insert a div with style="clear: both;" after the switch button?
-            clear_after: null		    // Override the element after which the clearing div should be inserted (null > right after the button)
+            clear_after: null,		    // Override the element after which the clearing div should be inserted (null > right after the button)
+            on_callback: undefined,		//callback function that will be executed after going to on state
+            off_callback: undefined		//callback function that will be executed after going to off state
         },
 
         _create: function() {
@@ -267,7 +269,8 @@
                     this.on_label.show();
                 }
                 this.button_bg.addClass("checked");
-
+                //execute on state callback if its supplied
+                if(typeof this.options.on_callback === 'function') this.options.on_callback.call(this);
             }
             else {
                 // Update the underlying checkbox state
@@ -287,6 +290,8 @@
                     this.on_label.hide();
                 }
                 this.button_bg.removeClass("checked");
+                //execute off state callback if its supplied
+                if(typeof this.options.off_callback === 'function') this.options.off_callback.call(this);
             }
             // Animate the switch
             this.button.animate({ left: newLeft }, 250, "easeInOutCubic");
