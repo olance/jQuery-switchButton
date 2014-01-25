@@ -246,13 +246,17 @@
             this._toggleSwitch();
         },
 
-        _toggleSwitch: function() {
+        _toggleSwitch: function(skipChangeEvent) {
             this.options.checked = !this.options.checked;
             var newLeft = "";
             if (this.options.checked) {
                 // Update the underlying checkbox state
                 this.element.prop("checked", true);
-                this.element.change();
+
+                // Trigger change event unless toggle is silent
+                if (!skipChangeEvent == true) {
+                  this.element.change();
+                }
 
                 var dLeft = this.options.width - this.options.button_width;
                 newLeft = "+=" + dLeft;
@@ -275,7 +279,11 @@
             else {
                 // Update the underlying checkbox state
                 this.element.prop("checked", false);
-                this.element.change();
+
+                // Trigger change event unless toggle is silent
+                if (!skipChangeEvent == true) {
+                  this.element.change();
+                }
                 newLeft = "-1px";
 
                 // Update labels states
@@ -295,8 +303,13 @@
             }
             // Animate the switch
             this.button.animate({ left: newLeft }, 250, "easeInOutCubic");
+        },
+        silentToggle: function() {
+          this._toggleSwitch(true);
+        },
+        toggle: function() {
+          this._toggleSwitch(false);
         }
-
     });
 
 })(jQuery);
