@@ -309,6 +309,11 @@
         },
         toggle: function() {
           this._toggleSwitch(false);
+        },
+        redraw: function() {
+          if (!this.element.prop("checked") == this.button_bg.hasClass("checked")) {
+            this._toggleSwitch(true);
+          }
         }
     });
 
