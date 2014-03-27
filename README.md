@@ -58,6 +58,11 @@ Styling
 The button and labels are styled with a few lines of CSS in ```jquery.switchButton.css```.
 Have a look at this file and fiddle with it to change the look of you switch button!
 
+Wordpress users
+---------------
+
+Have a look at [this answer](http://wordpress.stackexchange.com/questions/108257/how-to-load-jquery-easing-script-in-wordpress/108267#108267?newreg=7700a444aabf4aadbd1819e794d1d6c4) on StackExchange to include jQuery easing functions in order to make this plugin work in Wordpress.
+
 
 License
 -------
