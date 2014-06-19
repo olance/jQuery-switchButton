@@ -294,7 +294,7 @@
                 if(typeof this.options.off_callback === 'function') this.options.off_callback.call(this);
             }
             // Animate the switch
-            this.button.animate({ left: newLeft }, 250, "easeInOutCubic");
+            this.button.animate({ marginLeft: newLeft }, 250, "easeInOutCubic");
         }
 
     });
