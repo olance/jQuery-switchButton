@@ -50,7 +50,9 @@ Here are the available options:
 
     clear: true               // Should we insert a div with style="clear: both;" after the switch button?
     clear_after: null         // Override the element after which the clearing div should be inserted (null > right after the button)
-
+    on_callback: undefined,     //callback function that will be executed after going to on state
+    off_callback: undefined,        //callback function that will be executed after going to off state
+    trigger_callback_onload: true  // If the callbacks to be triggered on pageload or not.
 
 Styling
 -------
