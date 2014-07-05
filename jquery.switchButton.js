@@ -56,7 +56,8 @@
             clear: true,				// Should we insert a div with style="clear: both;" after the switch button?
             clear_after: null,		    // Override the element after which the clearing div should be inserted (null > right after the button)
             on_callback: undefined,		//callback function that will be executed after going to on state
-            off_callback: undefined		//callback function that will be executed after going to off state
+            off_callback: undefined,		//callback function that will be executed after going to off state
+            trigger_callback_onload: true  // If the callbacks to be triggered on pageload or not. true was the behaviour in original code
         },
 
         _create: function() {
@@ -105,7 +106,7 @@
             // This will animate all checked switches to the ON position when
             // loading... this is intentional!
             this.options.checked = !this.options.checked;
-            this._toggleSwitch();
+            this._toggleSwitch(this.options.trigger_callback_onload);
         },
 
         _refresh: function() {
@@ -246,7 +247,8 @@
             this._toggleSwitch();
         },
 
-        _toggleSwitch: function() {
+        _toggleSwitch: function(trigger_callback) {
+            trigger_callback = trigger_callback == false ? false : true;
             this.options.checked = !this.options.checked;
             var newLeft = "";
             if (this.options.checked) {
@@ -270,7 +272,7 @@
                 }
                 this.button_bg.addClass("checked");
                 //execute on state callback if its supplied
-                if(typeof this.options.on_callback === 'function') this.options.on_callback.call(this);
+                if(typeof this.options.on_callback === 'function' && trigger_callback == true ) this.options.on_callback.call(this);
             }
             else {
                 // Update the underlying checkbox state
@@ -291,7 +293,7 @@
                 }
                 this.button_bg.removeClass("checked");
                 //execute off state callback if its supplied
-                if(typeof this.options.off_callback === 'function') this.options.off_callback.call(this);
+                if(typeof this.options.off_callback === 'function' && trigger_callback == true ) this.options.off_callback.call(this);
             }
             // Animate the switch
             this.button.animate({ left: newLeft }, 250, "easeInOutCubic");
