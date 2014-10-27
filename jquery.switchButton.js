@@ -247,8 +247,8 @@
         },
 
         _toggleSwitch: function(isInitializing) {
-        	// Don't toggle the switch if it is set to readonly, unless it is initializing and animating itself
-        	if(!isInitializing && this.element.attr('readonly') == 'readonly')
+        	// Don't toggle the switch if it is set to readonly or disabled, unless it is initializing and animating itself
+        	if( !isInitializing && (this.element.attr('readonly') == 'readonly' || this.element.prop('disabled')) )
 	        		return;
 
             this.options.checked = !this.options.checked;
