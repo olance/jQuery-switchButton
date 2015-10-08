@@ -105,7 +105,7 @@
             // This will animate all checked switches to the ON position when
             // loading... this is intentional!
             this.options.checked = !this.options.checked;
-            this._toggleSwitch();
+            this._toggleSwitch(true);
         },
 
         _refresh: function() {
@@ -246,7 +246,7 @@
             this._toggleSwitch();
         },
 
-        _toggleSwitch: function() {
+        _toggleSwitch: function(param) {
             this.options.checked = !this.options.checked;
             var newLeft = "";
             if (this.options.checked) {
@@ -270,7 +270,9 @@
                 }
                 this.button_bg.addClass("checked");
                 //execute on state callback if its supplied
-                if(typeof this.options.on_callback === 'function') this.options.on_callback.call(this);
+                if(typeof(param) == "undefined") {
+                    if (typeof this.options.on_callback === 'function') this.options.on_callback.call(this);
+                }
             }
             else {
                 // Update the underlying checkbox state
@@ -291,7 +293,9 @@
                 }
                 this.button_bg.removeClass("checked");
                 //execute off state callback if its supplied
-                if(typeof this.options.off_callback === 'function') this.options.off_callback.call(this);
+                if(typeof(param) == "undefined") {
+                    if (typeof this.options.off_callback === 'function') this.options.off_callback.call(this);
+                }
             }
             // Animate the switch
             this.button.animate({ left: newLeft }, 250, "easeInOutCubic");
