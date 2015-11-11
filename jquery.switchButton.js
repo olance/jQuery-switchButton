@@ -105,7 +105,7 @@
             // This will animate all checked switches to the ON position when
             // loading... this is intentional!
             this.options.checked = !this.options.checked;
-            this._toggleSwitch();
+            this._toggleSwitch(true);
         },
 
         _refresh: function() {
@@ -196,13 +196,13 @@
             this.button_bg.click(function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                self._toggleSwitch();
+                self._toggleSwitch(false);
                 return false;
             });
             this.button.click(function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                self._toggleSwitch();
+                self._toggleSwitch(false);
                 return false;
             });
 
@@ -212,7 +212,7 @@
                     return false;
                 }
 
-                self._toggleSwitch();
+                self._toggleSwitch(false);
                 return false;
             });
 
@@ -221,7 +221,7 @@
                     return false;
                 }
 
-                self._toggleSwitch();
+                self._toggleSwitch(false);
                 return false;
             });
 
@@ -243,10 +243,14 @@
             }
 
             this.options.checked = !value;
-            this._toggleSwitch();
+            this._toggleSwitch(false);
         },
 
-        _toggleSwitch: function() {
+        _toggleSwitch: function(isInitializing) {
+        	// Don't toggle the switch if it is set to readonly or disabled, unless it is initializing and animating itself
+        	if( !isInitializing && (this.element.attr('readonly') == 'readonly' || this.element.prop('disabled')) )
+	        		return;
+
             this.options.checked = !this.options.checked;
             var newLeft = "";
             if (this.options.checked) {
