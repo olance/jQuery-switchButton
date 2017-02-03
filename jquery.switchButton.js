@@ -49,7 +49,8 @@
             on_label: "ON",				// Text to be displayed when checked
             off_label: "OFF",			// Text to be displayed when unchecked
 
-            width: 25,					// Width of the button in pixels
+            size_unit: "px",			// Size Unit for the Switch
+			width: 25,					// Width of the button in pixels
             height: 11,					// Height of the button in pixels
             button_width: 12,			// Width of the sliding part in pixels
 
@@ -183,10 +184,10 @@
             this.off_label.html(this.options.off_label);
 
             // Refresh button's dimensions
-            this.button_bg.width(this.options.width);
-            this.button_bg.height(this.options.height);
-            this.button.width(this.options.button_width);
-            this.button.height(this.options.height);
+            this.button_bg.width(this.options.width.concat(this.options.size_unit));
+            this.button_bg.height(this.options.height.concat(this.options.size_unit));
+            this.button.width(this.options.button_width.concat(this.options.size_unit));
+            this.button.height(this.options.height.concat(this.options.size_unit));
         },
 
         _initEvents: function() {
@@ -258,8 +259,8 @@
                 this.element.prop("checked", true);
                 this.element.change();
 
-                var dLeft = this.options.width - this.options.button_width;
-                newLeft = "+=" + dLeft;
+                var dLeft = this.options.width - this.options.button_width;                
+                newLeft = dLeft + this.options.size_unit;
 
                 // Update labels states
                 if(this.options.labels_placement == "both")
